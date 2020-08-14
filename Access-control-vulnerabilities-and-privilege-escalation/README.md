@@ -26,8 +26,8 @@ vào trang admin nơi có thể thực hiện thao tác xóa một tài khoản 
 * Lab: https://portswigger.net/web-security/access-control/lab-unprotected-admin-functionality-with-unpredictable-url
 * *Đề: Bài lab này không có bất kì phương pháp bảo vệ nào đối với trang admin panel. Trang admin panel rất khó đoán, tuy nhiên thì trang này lại bị để lộ tại một nơi nào đó trong ứng dụng. Giải bài lab này bằng cách truy cập admin panel và xóa user `carlos`*
 * Xem source code, ta thấy một thông tin đáng chú ý: Ta thấy có một script đang xét user có phải là admin hay không để redirect vào trang admin panel:
-!(unpredictable admin panel)(./Images/4.png)
+![unpredictable admin panel](./Images/4.png)
 * Truy cập vào trang đó và xóa user `carlos`
-!(remove user)[./Images/5.png)
+![remove user](./Images/5.png)
 
 

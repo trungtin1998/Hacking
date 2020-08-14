@@ -56,15 +56,24 @@ Một vài ứng dụng xác định quyền hạn/ vai trò của user khi đă
 
 ## 3. Broken access control resulting from platform misconfiguration
 * Một vài ứng dụng thực thi việc kiểm soát truy cập vào nền tảng bởi việc hạn chế truy cập vào các URL và phương thức HTTP cụ thể dựa trên vai trò của user. 
-* Nhiều framework hỗ trợ nhiều header non-standard mà có thể được sử dụng để ghi đè vào URL tại các gói tin Request gốc, chẳng hạn `X-Original-URL` và `X-Rewrite-URL`. Nếu website kiểm soát nghiêm ngặt tại front-end để hạn chế sự truy cập dựa trên các URL, nhưng ứng dụng lại cho phép ghi đè thông qua header của gói tin request, nó có thể gây ra lỗi bypass việc kiểm soát truy cập. 
+* Nhiều framework hỗ trợ một vài header non-standard mà có thể được sử dụng để ghi đè vào URL tại các gói tin Request gốc, chẳng hạn `X-Original-URL` và `X-Rewrite-URL`. Nếu website kiểm soát nghiêm ngặt tại front-end để hạn chế sự truy cập dựa trên các URL, nhưng ứng dụng lại cho phép ghi đè thông qua header của gói tin request, nó có thể gây ra lỗi bypass việc kiểm soát truy cập. 
 * *Ví dụ 1: URL-based access control can be circumvented*
 * Lab: https://portswigger.net/web-security/access-control/lab-url-based-access-control-can-be-circumvented
 * *Đề: Website này không xác thực admin panel tại trang /admin, nhưng hệ thống front-end được cấu hình để chặn các truy cập từ bên ngoài đến đường dẫn. Tuy nhiên, ứng dụng back-end được xây dựng sẵn trong framework để hỗ trợ `X-Original-URL` header. Để giải bài lab này, truy cập vào admin panel và xóa user `carlos`*
 * Truy cập bằng standard user vào endpoint /admin, ta thấy truy cập bị từ chối.
 ![access denied](./Images/14.png)
-* Sử dụng header `X-Original-URL` gửi kèm trong gói tin GET Request gửi lên server để ghi đè vào , ta có thể truy cập trang admin panel:
+* Sử dụng header `X-Original-URL` gửi kèm trong gói tin GET Request gửi lên server để ghi đè vào, ta có thể truy cập trang admin panel:
 ![modify Request](./Images/15.png)
 ![accessable admin panel](./Images/16.png)
 * Xóa user `carlos` bằng cách gửi một POST Request lên server:
 ![remove user](./Images/17.png)
 ![solved lab](./Images/18.png)
+
+## II. Horizontal privilege escalation
+Horizontal privilege escalation phát sinh khi một user có thể truy cập vào các nguồn tài nguyên cùng loại nhưng thuộc về một user khác. Ví dụ như một nhân viên chỉ nên có thể truy cập vào công việc và bảng lương của họ, nhưng họ có thể truy cập vào các record của người khác, đó là hành động Horizontal privilege escalation.
+* *Ví dụ 1: User ID controlled by request parameter*
+* Lab: https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter
+* *Đề: Bài lab này làm về lỗ hổng horizontal privilege escalation trên trang My Account. Submit API key của user `carlos` để hoàn thành bài lab này. Tài khoản của bạn là `wiener:peter`*
+* Một ví dụ đơn giản về việc thay đổi User ID để truy cập vào tài nguyên của người khác. Chuyển trường `id` từ `wiener` sang `carlos` để có thể xem được `API key` của user `carlos`
+![ID weiner](./Images/19.png)
+![ID carlos](./Images/20.png)

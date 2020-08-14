@@ -71,9 +71,20 @@ Một vài ứng dụng xác định quyền hạn/ vai trò của user khi đă
 
 ## II. Horizontal privilege escalation
 Horizontal privilege escalation phát sinh khi một user có thể truy cập vào các nguồn tài nguyên cùng loại nhưng thuộc về một user khác. Ví dụ như một nhân viên chỉ nên có thể truy cập vào công việc và bảng lương của họ, nhưng họ có thể truy cập vào các record của người khác, đó là hành động Horizontal privilege escalation.
-* *Ví dụ 1: User ID controlled by request parameter*
+### *Ví dụ 1: User ID controlled by request parameter*
 * Lab: https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter
 * *Đề: Bài lab này làm về lỗ hổng horizontal privilege escalation trên trang My Account. Submit API key của user `carlos` để hoàn thành bài lab này. Tài khoản của bạn là `wiener:peter`*
 * Một ví dụ đơn giản về việc thay đổi User ID để truy cập vào tài nguyên của người khác. Chuyển trường `id` từ `wiener` sang `carlos` để có thể xem được `API key` của user `carlos`
 ![ID weiner](./Images/19.png)
 ![ID carlos](./Images/20.png)
+
+* Trong một số ứng dụng, giá trị của các parameter có thể không thể đoán được. Ví dụ thay vì sử dụng số theo thứ tự tăng dần hoặc tên của user, ứng dụng có thể sử dụng globally unique identifiers (GUID) để định danh người dùng. Do đó Attacker rất khó đoán được định danh của người dùng khác. Tuy nhiên có thể GUID thuộc về người dùng khác có thể bị lộ ở một nơi nào đó trong ứng dụng, có thể giúp cho việc tấn công Horizontal privilege escalation có thể xảy ra.
+### *Ví dụ 2: User ID controlled by request parameter, with unpredictable user IDs*
+* Lab: https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-unpredictable-user-ids
+* *Đề: Bài lab này có lỗ hổng horizontal privilege escalation tại trang My Account, nhưng được định danh người dùng bởi GUID. Để giải bài lab này, tìm ra GUID cho user `carlos`, sau đó submit API Key của user này như kết quả. Tài khoản của bạn là ` wiener:peter`*
+* Tại bài post số 3 - Procrastination, bài được viết bởi tác giả `carlos`. Ta có thể xem `userid` của user này bằng cách xem source code hoặc click vào tên tác giả.
+![click username](./Images/21.png)
+![GUID của carlos](./Images/22.png)
+* Sau khi có `userid` của `carlos`, ta có vào trang My Account để tiến hành các tấn công Horizontal privilege escalation:
+![GUID của wiener](./Images/23.png)
+![GUID của carlos](./Images/24.png)

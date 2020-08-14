@@ -88,3 +88,15 @@ Horizontal privilege escalation phát sinh khi một user có thể truy cập v
 * Sau khi có `userid` của `carlos`, ta có vào trang My Account để tiến hành các tấn công Horizontal privilege escalation:
 ![GUID của wiener](./Images/23.png)
 ![GUID của carlos](./Images/24.png)
+
+* Ở một vài trường hợp, ứng dụng có thể detect khi user không được phép truy cập vào các tài nguyên, và trả về redirect tới login page. Tuy nhiên, response chứa redirect vẫn có thể bao gồm một vài thông tin nhạy cảm thuộc về target user, do đó tấn công vẫn thành công.
+### *Ví dụ 3: User ID controlled by request parameter with data leakage in redirect*
+* Lab: https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-data-leakage-in-redirect
+* *Đề: Bài lab này chứa đựng lỗ hổng kiểm soát truy cập khi các thông tin nhạy cảm bị lộ trong body của gói redirect response. Để giải bài lab này, submit API key đạt được của user `carlos`. Tài khoản của bạn là `wiener:peter`*
+* `id` dễ đoán bởi việc chuyển từ `wiener` sang `carlos`. Tuy đã redirect sang trang /home, nhưng việc sử dụng function `header()` để redirect mà không có `exit()` hoặc `die()` thì chương trình sẽ vẫn thực thi đoạn code bên dưới sẽ vẫn được trả về kèm trong gói tin redirect. (Do function `header()` mặc định sẽ trả về code 302: temporary redirect)
+* Chuyển sang id của `carlos`
+![ID của carlos](./Images/25.png)
+* Bị redirect sang trang home:
+![root location](./Images/26.png)
+* Tuy nhiên thì thông tin My Account của user `carlos` vẫn tiếp tục được thực thi và hiển thị tại gói tin response redirect.
+![My Account User Carlos tại response redirect](./Images/27.png) 

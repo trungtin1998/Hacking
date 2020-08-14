@@ -45,7 +45,7 @@ Một vài ứng dụng xác định quyền hạn/ vai trò của user khi đă
 ![Remove user](./Images/9.png)
 #### *Ví dụ 2: User role can be modified in user profile*
 * Lab: https://portswigger.net/web-security/access-control/lab-user-role-can-be-modified-in-user-profile
-* *Đề: Bài lab này có trang admin panel tại endpoint /admin. Nó chỉ có thể truy cập bởi user có trường roleid là 2. Giải bài lab này bằng cách truy cập admin panel và xóa tài khoản `carlos`. Bạn có thể đăng nhập vào tài khoản của một standard user với credential như sau: `wiener:peter`*.
+* *Đề: Bài lab này có trang admin panel tại endpoint /admin. Nó chỉ có thể truy cập bởi user có trường `roleid` là 2. Giải bài lab này bằng cách truy cập admin panel và xóa tài khoản `carlos`. Bạn có thể đăng nhập vào tài khoản của một standard user với credential như sau: `wiener:peter`*.
 * Đầu tiên ta sẽ đi tìm trang có thể cho phép ta modify thông tin user hoặc các vị trí cho phép ta gửi các POST Request. Ta xác định được vị trí đó là trang My Account, cho phép ta update email. Thử update email để xem cấu trúc của gói tin POST Request gửi lên Server để Update Profile user `wiener`:
 ![original POST Request](./Images/10.png)
 ![original Response](./Images/11.png)
@@ -56,12 +56,15 @@ Một vài ứng dụng xác định quyền hạn/ vai trò của user khi đă
 
 ## 3. Broken access control resulting from platform misconfiguration
 * Một vài ứng dụng thực thi việc kiểm soát truy cập vào nền tảng bởi việc hạn chế truy cập vào các URL và phương thức HTTP cụ thể dựa trên vai trò của user. 
-* Nhiều framework hỗ trợ nhiều header non-standard mà có thể được sử dụng đẻ ghi đè vào URL tại các gói tin Request gốc, chẳng hạn `X-Original-URL` và `X-Rewrite-URL`. Nếu website kiểm soát nghiêm ngặt sự tại front-end để hạn chế sự truy cập dựa trên các URL, nhưng ứng dụng lại cho phép ghi đè thông qua header của gói tin request, nó có thể gây ra lỗi bypass việc kiểm soát truy cập. 
+* Nhiều framework hỗ trợ nhiều header non-standard mà có thể được sử dụng để ghi đè vào URL tại các gói tin Request gốc, chẳng hạn `X-Original-URL` và `X-Rewrite-URL`. Nếu website kiểm soát nghiêm ngặt tại front-end để hạn chế sự truy cập dựa trên các URL, nhưng ứng dụng lại cho phép ghi đè thông qua header của gói tin request, nó có thể gây ra lỗi bypass việc kiểm soát truy cập. 
 * *Ví dụ 1: URL-based access control can be circumvented*
 * Lab: https://portswigger.net/web-security/access-control/lab-url-based-access-control-can-be-circumvented
-* *Đề: Website này không xác thực admin panel tại trang /admin, nhưng hệ thống front-end được cấu hình để khóa các truy cập từ bên ngoài đến đường dẫn. Tuy nhiên, ứng dụng back-end được xây dựng sẵn trong framework để hỗ trợ `X-Original-URL` header. Để giải bài lab này, truy cập vào admin panel và xóa user `carlos`*
+* *Đề: Website này không xác thực admin panel tại trang /admin, nhưng hệ thống front-end được cấu hình để chặn các truy cập từ bên ngoài đến đường dẫn. Tuy nhiên, ứng dụng back-end được xây dựng sẵn trong framework để hỗ trợ `X-Original-URL` header. Để giải bài lab này, truy cập vào admin panel và xóa user `carlos`*
 * Truy cập bằng standard user vào endpoint /admin, ta thấy truy cập bị từ chối.
 ![access denied](./Images/14.png)
-* Sử dụng header `X-Original-URL` gửi kèm trong gói tin GET Request gửi lên server, ta có thể truy cập trang admin panel:
+* Sử dụng header `X-Original-URL` gửi kèm trong gói tin GET Request gửi lên server để ghi đè vào , ta có thể truy cập trang admin panel:
 ![modify Request](./Images/15.png)
 ![accessable admin panel](./Images/16.png)
+* Xóa user `carlos` bằng cách gửi một POST Request lên server:
+![remove user](./Images/17.png)
+![solved lab](./Images/18.png)

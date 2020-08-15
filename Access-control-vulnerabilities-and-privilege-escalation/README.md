@@ -120,3 +120,14 @@ Thông thường horizontal privilege escalation có thể sẽ trở thành ver
 ![Password admin](./Images/29.png)
 * Truy cập vào tài khoản admin bằng username và password có được, thực hiện xóa tài khoản `carlos`
 ![remove user](./Images/30.png)
+
+# II. Insecure direct object references
+## Giới thiệu
+## Demo
+### *Ví dụ 1: Insecure direct object references*
+* Lab: https://portswigger.net/web-security/access-control/lab-insecure-direct-object-references
+* *Đề: Bài lab này lưu trữ dữ liệu log chat trực tiếp trên hệ thống file system và có thể lấy lại chúng bằng cách sử dụng URL tỉnh. Để giải bài lab này tìm password của user `carlos` và đăng nhập vào tài khoản của anh ấy*
+* Khi ta chọn vào `live chat`, sẽ có nút `View transcript`. Điều đặc biệt là khi ta ấn bất kì lần nào thì số thứ tự của file text được download về đều bắt đầu từ 2 trở đi. Có lẻ trước đó đã có một cuộc hội thoại. Ta download cuộc hội thoại đầu tiên bằng cách gửi tới URL tỉnh lấy về file `1.txt`
+![Retreive 1.txt](./Images/31.png)
+* Và tìm được password của user `carlos` trong cuộc hội thoại này. Sử dụng password này đăng nhập vào tài khoản `carlos`.
+![Capture Carlos's Password](./Images/32.png)

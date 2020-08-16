@@ -11,6 +11,7 @@ vào trang admin nơi có thể thực hiện thao tác xóa một tài khoản 
 * Khai thác file robots.txt
 * Brute force danh sách các endpoint để tìm ra các tính năng ẩn.
 * Để lộ URL đến các chức năng nhạy cảm trong source code
+
 #### Demo
 ##### *Ví dụ 1: Unprotected admin functionality*
 * Lab: https://portswigger.net/web-security/access-control/lab-unprotected-admin-functionality
@@ -23,6 +24,7 @@ vào trang admin nơi có thể thực hiện thao tác xóa một tài khoản 
 * Cách 2: Brute force danh sách các endpoint 
 	* Sử dụng tool dirsearch với URL là trang home của target. Tìm ra được trang admin panel
 ![brute force using dirsearch](./Images/3.png)
+
 ##### *Ví dụ 2: Unprotected admin functionality with unpredictable URL*
 * Lab: https://portswigger.net/web-security/access-control/lab-unprotected-admin-functionality-with-unpredictable-url
 * *Đề: Bài lab này không có bất kì phương pháp bảo vệ nào đối với trang admin panel. Trang admin panel rất khó đoán, tuy nhiên thì trang này lại bị để lộ tại một nơi nào đó trong ứng dụng. Giải bài lab này bằng cách truy cập admin panel và xóa user `carlos`*
@@ -46,6 +48,7 @@ Một vài ứng dụng xác định quyền hạn/ vai trò của user khi đă
 ![Reference tới trang admin panel](./Images/8.png)
 * Delete user `carlos` tại trang admin panel
 ![Remove user](./Images/9.png)
+
 ##### *Ví dụ 2: User role can be modified in user profile*
 * Lab: https://portswigger.net/web-security/access-control/lab-user-role-can-be-modified-in-user-profile
 * *Đề: Bài lab này có trang admin panel tại endpoint /admin. Nó chỉ có thể truy cập bởi user có trường `roleid` là 2. Giải bài lab này bằng cách truy cập admin panel và xóa tài khoản `carlos`. Bạn có thể đăng nhập vào tài khoản của một standard user với credential như sau: `wiener:peter`*.
@@ -61,6 +64,7 @@ Một vài ứng dụng xác định quyền hạn/ vai trò của user khi đă
 ### Giới thiệu
 * Một vài ứng dụng thực thi việc kiểm soát truy cập vào nền tảng bởi việc hạn chế truy cập vào các URL và phương thức HTTP cụ thể dựa trên vai trò của user. 
 * Nhiều framework hỗ trợ một vài header non-standard mà có thể được sử dụng để ghi đè vào URL tại các gói tin Request gốc, chẳng hạn `X-Original-URL` và `X-Rewrite-URL`. Nếu website kiểm soát nghiêm ngặt tại front-end để hạn chế sự truy cập dựa trên các URL, nhưng ứng dụng lại cho phép ghi đè thông qua header của gói tin request, nó có thể gây ra lỗi bypass việc kiểm soát truy cập.
+
 ### Demo
 #### *Ví dụ 1: URL-based access control can be circumvented*
 * Lab: https://portswigger.net/web-security/access-control/lab-url-based-access-control-can-be-circumvented
@@ -86,6 +90,7 @@ Horizontal privilege escalation phát sinh khi một user có thể truy cập v
 ![ID carlos](./Images/20.png)
 
 * Trong một số ứng dụng, giá trị của các parameter có thể không thể đoán được. Ví dụ thay vì sử dụng số theo thứ tự tăng dần hoặc tên của user, ứng dụng có thể sử dụng globally unique identifiers (GUID) để định danh người dùng. Do đó Attacker rất khó đoán được định danh của người dùng khác. Tuy nhiên có thể GUID thuộc về người dùng khác có thể bị lộ ở một nơi nào đó trong ứng dụng, có thể giúp cho việc tấn công Horizontal privilege escalation có thể xảy ra.
+
 #### *Ví dụ 2: User ID controlled by request parameter, with unpredictable user IDs*
 * Lab: https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-unpredictable-user-ids
 * *Đề: Bài lab này có lỗ hổng horizontal privilege escalation tại trang My Account, nhưng được định danh người dùng bởi GUID. Để giải bài lab này, tìm ra GUID cho user `carlos`, sau đó submit API Key của user này như kết quả. Tài khoản của bạn là ` wiener:peter`*
@@ -97,6 +102,7 @@ Horizontal privilege escalation phát sinh khi một user có thể truy cập v
 ![GUID của carlos](./Images/24.png)
 
 * Ở một vài trường hợp, ứng dụng có thể detect khi user không được phép truy cập vào các tài nguyên, sẽ trả về redirect tới login page. Tuy nhiên, response chứa redirect vẫn có thể bao gồm một vài thông tin nhạy cảm thuộc về target user, do đó tấn công vẫn thành công.
+
 #### *Ví dụ 3: User ID controlled by request parameter with data leakage in redirect*
 * Lab: https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-data-leakage-in-redirect
 * *Đề: Bài lab này chứa đựng lỗ hổng kiểm soát truy cập khi các thông tin nhạy cảm bị lộ trong body của gói redirect response. Để giải bài lab này, submit API key đạt được của user `carlos`. Tài khoản của bạn là `wiener:peter`*
@@ -132,16 +138,18 @@ Insecure Direct Object References xảy ra khi ứng dụng cung cấp sự truy
 ![Retreive 1.txt](./Images/31.png)
 * Và tìm được password của user `carlos` trong cuộc hội thoại này. Sử dụng password này đăng nhập vào tài khoản `carlos`.
 ![Capture Carlos's Password](./Images/32.png)
+
 ### Access control vulnerabilities in multi-step processes
 * Nhiều web site thực thi nhiều chức năng quan trọng thông qua một số bước. Nó thường có nhiều input hoặc nhiều sự lựa chọn, hoặc user cần xác nhận trước khi hành động được thực thi. Cho ví dụ như các chức năng quản trị để update thông tin chi tiết của user thường bao gồm các bước sau:
 1. Tải form chứa chi tiết thông tin về user
 2. Submit sự thay đổi
 3. Review sự thay đổi và xác nhận.
-Đôi khi một web site sẽ thực thi kiểm soát truy cập nghiêm ngặt thông qua một số bước nhưng phớt lờ tại một vài bước khác. Giả sử rằng kiểm soát truy cập chỉ được áp dụng tại bước thứ 1 và bước thứ 2, tuy nhiên không thực hiện với bước thứ 3. Website thì cho rằng user chỉ sẽ đạt được tới bước 3 khi hoàn thành các bước đầu tiên, nơi đã được kiểm soát hợp lý. Tại đây, attacker có thể đạt được các truy cập không được phép tới các chức năng bởi việc bỏ qua bước 1 bước 2 và trực tiếp submit request tại bước 3 với các param được yêu cầu.
+* Đôi khi một web site sẽ thực thi kiểm soát truy cập nghiêm ngặt thông qua một số bước nhưng phớt lờ tại một vài bước khác. Giả sử rằng kiểm soát truy cập chỉ được áp dụng tại bước thứ 1 và bước thứ 2, tuy nhiên không thực hiện với bước thứ 3. Website thì cho rằng user chỉ sẽ đạt được tới bước 3 khi hoàn thành các bước đầu tiên, nơi đã được kiểm soát hợp lý. Tại đây, attacker có thể đạt được các truy cập không được phép tới các chức năng bởi việc bỏ qua bước 1 bước 2 và trực tiếp submit request tại bước 3 với các param được yêu cầu.
+
 #### *Ví dụ 2: Multi-step process with no access control on one step*
 * Lab: https://portswigger.net/web-security/access-control/lab-multi-step-process-with-no-access-control-on-one-step
 * *Đề: Bài lab này có trang admin panel với sự thiếu xót trong việc xử lý cho việc thay đổi vai trò của user. Bạn có thể làm quen với admin panel với việc sử dụng tài khoản: `administrator:admin`. Để giải bài lab, đăng nhập bằng cách sử dụng tài khoản `wiener:peter` và khai thác sự thiếu kiểm soát truy cập để biến tài khoản của chính mình thành tài khoản admin*
-* Ở bài lab này khi gửi một request yêu cầu upgrade/downgrade một tài khoản thì luôn có một request yêu cầu xác nhận sự thay đổi đến trả về người gửi form. Nếu attacker bỏ qua bước 1, 2 và gửi kèm thêm parameter `confirmed=true` thì sẽ submit trực tiếp yêu cầu lên server. 
+* Ở bài lab này khi gửi một request yêu cầu upgrade/downgrade một tài khoản thì luôn có một request yêu cầu xác nhận sự thay đổi đến người gửi form. Nếu attacker bỏ qua bước 1, 2 và gửi kèm thêm parameter `confirmed=true` thì sẽ submit trực tiếp yêu cầu lên server. 
 * Tải form chứa chi tiết thông tin về user và submit sự thay đổi:
 ![submit sự thay đổi](./Images/33.png)
 * Review và xác nhận sự thay đổi:
@@ -149,3 +157,13 @@ Insecure Direct Object References xảy ra khi ứng dụng cung cấp sự truy
 ![Gửi request yêu cầu thay đổi](./Images/35.png)
 * Dựa trên gói request cuối gửi lên server, ta có thể bỏ qua bước 1 và bước 2 để trực tiếp nâng đặc quyền của một tài khoản (Bằng việc thay sesion của gói request trên bằng session của user `wierner`):
 ![promote admin's role](./Images/36.png)
+
+### Referer-based access control
+* Một vài website kiểm soát truy cập dựa trên Referer header được gửi đi trong các gói HTTP Request. Referer header thông thường được thêm vào gói request bởi trình duyệt để chỉ ra page mà quét được thiết lập.
+* Giả sử rằng ứng dụng thực thi việc kiểm soát truy cập thông qua trang quản trị chính tại `/admin`, nhưng cho các trang cấp dưới như `/admin/deleteUser` chỉ quan sát Referer header. Nếu Referer header chứa `/admin` trên URL thfi request được cho phép.
+* Trong một vài trường hợp, bởi vì Referer header có thể hoàn toàn được kiểm soát bởi attacker, họ hoàn toàn có thể làm giả request trực tiếp tới các sub-page nhạy cảm, bằng việc cung cấp các Referer header và đạt truy cập không được phép.
+* *Ví dụ 3: Referer-based access control *
+* Lab: https://portswigger.net/web-security/access-control/lab-referer-based-access-control
+* *Đề: Bài lab kiểm soát truy cập tới các chức năng quản trị dựa trên Referer header. Bạn có thể làm quen với admin panel bởi việc đăng nhập vào tài khoản `administrator:admin`. Để giải bài lab, truy cập vào tài khoản `wiener:peter` và khai thác sự thiếu soát kiểm troát truy cập để nâng bạn lên tài khoản admin.*
+* Vào tài khoản admin để xem request gửi lên server như thế nào và gửi sang repeater. Đăng nhập vào tài khoản `wiener` và thay đổi session để nâng tài khoản `wiener` lên tài khoản quản trị.
+![promote admin's role](./Images/37.png)

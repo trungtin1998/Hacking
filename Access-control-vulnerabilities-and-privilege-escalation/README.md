@@ -122,8 +122,9 @@ Thông thường horizontal privilege escalation có thể sẽ trở thành ver
 ![remove user](./Images/30.png)
 
 # II. Insecure direct object references
-## Giới thiệu
-## Demo
+## 1. Giới thiệu
+Insecure Direct Object References xảy ra khi ứng dụng cung cấp sự truy cập trực tiếp vào các đối tượng dựa trên input của người dùng nhập vào. Kết quả là lỗ hổng này cho phép attacker có thể bypass authorization và truy cập vào các tài nguyên trực tiếp trong hệ thống, ví dụ các record trong database hoặc các file. Insecure Direct Object References được thực hiện bởi sự thay đổi giá trị của các parameter được sử dụng để trỏ đến trực tiếp các đối tượng. Nguyên nhân bởi vì các ứng dụng sử dụng input do người dùng nhập vào và dùng chúng để lấy các đối tượng mà không thực hiện các cơ chế kiểm soát truy cập một cách hiệu quả.
+## 2. Demo
 ### *Ví dụ 1: Insecure direct object references*
 * Lab: https://portswigger.net/web-security/access-control/lab-insecure-direct-object-references
 * *Đề: Bài lab này lưu trữ dữ liệu log chat trực tiếp trên hệ thống file system và có thể lấy lại chúng bằng cách sử dụng URL tỉnh. Để giải bài lab này tìm password của user `carlos` và đăng nhập vào tài khoản của anh ấy*
@@ -131,3 +132,20 @@ Thông thường horizontal privilege escalation có thể sẽ trở thành ver
 ![Retreive 1.txt](./Images/31.png)
 * Và tìm được password của user `carlos` trong cuộc hội thoại này. Sử dụng password này đăng nhập vào tài khoản `carlos`.
 ![Capture Carlos's Password](./Images/32.png)
+### Access control vulnerabilities in multi-step processes
+* Nhiều web site thực thi nhiều chức năng quan trọng thông qua một số bước. Nó thường có nhiều input hoặc nhiều sự lựa chọn, hoặc user cần xác nhận trước khi hành động được thực thi. Cho ví dụ như các chức năng quản trị để update thông tin chi tiết của user thường bao gồm các bước sau:
+1. Tải form chứa chi tiết thông tin về user
+2. Submit sự thay đổi
+3. Review sự thay đổi và xác nhận.
+Đôi khi một web site sẽ thực thi kiểm soát truy cập nghiêm ngặt thông qua một số bước nhưng phớt lờ tại một vài bước khác. Giả sử rằng kiểm soát truy cập chỉ được áp dụng tại bước thứ 1 và bước thứ 2, tuy nhiên không thực hiện với bước thứ 3. Website thì cho rằng user chỉ sẽ đạt được tới bước 3 khi hoàn thành các bước đầu tiên, nơi đã được kiểm soát hợp lý. Tại đây, attacker có thể đạt được các truy cập không được phép tới các chức năng bởi việc bỏ qua bước 1 bước 2 và trực tiếp submit request tại bước 3 với các param được yêu cầu.
+#### *Ví dụ 2: Multi-step process with no access control on one step*
+* Lab: https://portswigger.net/web-security/access-control/lab-multi-step-process-with-no-access-control-on-one-step
+* *Đề: Bài lab này có trang admin panel với sự thiếu xót trong việc xử lý cho việc thay đổi vai trò của user. Bạn có thể làm quen với admin panel với việc sử dụng tài khoản: `administrator:admin`. Để giải bài lab, đăng nhập bằng cách sử dụng tài khoản `wiener:peter` và khai thác sự thiếu kiểm soát truy cập để biến tài khoản của chính mình thành tài khoản admin*
+* Ở bài lab này khi gửi một request yêu cầu upgrade/downgrade một tài khoản thì luôn có một request yêu cầu xác nhận sự thay đổi đến trả về người gửi form. Nếu attacker bỏ qua bước 1, 2 và gửi kèm thêm parameter `confirmed=true` thì sẽ submit trực tiếp yêu cầu lên server. 
+* Tải form chứa chi tiết thông tin về user và submit sự thay đổi:
+![submit sự thay đổi](./Images/33.png)
+* Review và xác nhận sự thay đổi:
+![Xác nhận sự thay đổi](./Images/34.png)
+![Gửi request yêu cầu thay đổi](./Images/35.png)
+* Dựa trên gói request cuối gửi lên server, ta có thể bỏ qua bước 1 và bước 2 để trực tiếp nâng đặc quyền của một tài khoản (Bằng việc thay sesion của gói request trên bằng session của user `wierner`):
+![promote admin's role](./Images/36.png)

